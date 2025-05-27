@@ -1,0 +1,631 @@
+#include <iostream>
+using namespace std;
+
+/*3.Створіть функцію, яка приймає вказівник на int і збільшує значення за
+цим вказівником на 1.*/
+void incrementValue(int* ptr) {
+    *ptr += 1;
+    cout << "Значення після збільшення: " << *ptr << endl;
+}
+
+/*4. Створіть функцію, яка приймає два вказівники на int і міняє значення цих
+змінних місцями.*/
+void swapValues(int* ptrA, int* ptrB) {
+    int temp = *ptrA;
+    *ptrA = *ptrB;
+    *ptrB = temp;
+    cout << "Значення після обміну: a = " << *ptrA << ", b = " << *ptrB << endl;
+}
+
+/*5. Знайдіть суму всіх елементів масиву int a[10], використовуючи лише
+вказівники та арифметику вказівників*/
+void sumArray(int* pArr, int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += *(pArr + i);
+    }
+    cout << "Сума елементів масиву: " << sum << endl;
+}
+
+/*6. Реалізуйте функцію, яка отримує вказівник на масив і його розмір, і
+повертає кількість парних елементів(без використання індексів).*/
+int countEven(int* parr, int size) {
+    int count = 0;
+    for (int i = 0; i < size; i++) {
+        if (*(parr + i) % 2 == 0) {
+            count++;
+        }
+    }
+    return count;
+}
+
+/*7. Реалізуйте функцію, яка отримує вказівник на масив і його розмір, і
+повертає максимальний елемент масиву.*/
+
+int findMax(int* pArr, int size) {
+    int max = *pArr;
+    for (int i = 1; i < size; i++) {
+        if (*(pArr + i) > max) {
+            max = *(pArr + i);
+        }
+    }
+    return max;
+}
+
+/*8. Напишіть функцію, яка приймає вказівник на масив і його розмір, і
+перевертає масив(інвертує порядок елементів), використовуючи лише
+вказівники.*/
+
+void reverseArray(int* pArr, int size) {
+    for (int i = 0; i < size / 2; i++) {
+        int temp = *(pArr + i);
+        *(pArr + i) = *(pArr + size - 1 - i);
+        *(pArr + size - 1 - i) = temp;
+    }
+}
+
+/*9. Створіть функцію, яка підраховує кількість додатних, від’ємних і нульових
+елементів у масиві, та зберігає ці значення через три передані вказівники.*/
+void countElements(int* arr, int size, int* posCount, int* negCount, int* zeroCount) {
+    *posCount = 0;
+    *negCount = 0;
+    *zeroCount = 0;
+    for (int i = 0; i < size; i++) {
+        if (*(arr + i) > 0) {
+            (*posCount)++;
+        }
+        else if (*(arr + i) < 0) {
+            (*negCount)++;
+        }
+        else {
+            (*zeroCount)++;
+        }
+    }
+}
+
+/*10.Реалізуйте функцію, яка отримує вказівник на масив і його розмір, та
+замінює всі непарні елементи на 0 (використовуючи вказівники).*/
+
+void replaceOddWithZero(int* pArr, int size) {
+    for (int i = 0; i < size; i++) {
+        if (*(pArr + i) % 2 != 0) {
+            *(pArr + i) = 0;
+        }
+    }
+}
+
+/*11. Створіть функцію, яка копіює всі парні елементи з одного масиву в інший
+того самого розміру(залишені місця за потреби заповнити нулями).
+Використовуйте вказівники*/
+void copyEvenElements(int* source, int* destination, int size) {
+    int destIndex = 0;
+    for (int i = 0; i < size; i++) {
+        if (*(source + i) % 2 == 0) {
+            *(destination + destIndex) = *(source + i);
+            destIndex++;
+        }
+    }
+    for (; destIndex < size; destIndex++) {
+        *(destination + destIndex) = 0;
+    }
+}
+/*/*Створити функцію, яка дозволяє додавати блок елементів у кінець
+масиву.*/
+void addElements(int** arr, int& size, int* newElements, int newSize) {
+    int* preplace = new int[size + newSize];
+    for (int i = 0; i < size; i++) {
+        *(preplace + i) = *(*arr + i);
+    }
+    for (int i = 0; i < newSize; i++) {
+        *(preplace + size + i) = *(newElements + i);
+    }
+    delete[] * arr;
+    *arr = preplace;
+    size += newSize;  
+}
+/*.Написати функцію, яка отримує вказівник на динамічний масив і його
+розмір. Функція повинна видалити з масиву всі прості числа і повернути
+вказівник на новий динамічний масив.
+*/
+int checkPrime(int num) {
+    if (num < 2) return 0;
+    for (int i = 2; i * i <= num; i++) {
+        if (num % i == 0) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int* removePrimes(int* arr, int& size) {
+    int countNonPrime = 0;
+    for (int i = 0; i < size; i++) {
+        if (checkPrime(arr[i]) == 0) {
+            countNonPrime++;
+        }
+    }
+
+    int* newArr = new int[countNonPrime];
+    int j = 0;
+    for (int i = 0; i < size; i++) {
+        if (checkPrime(arr[i]) == 0) {
+            newArr[j] = arr[i];
+            j++;
+        }
+    }
+
+    delete[] arr;
+    size = countNonPrime;
+
+    return newArr;
+}
+/**/
+void splitArray(
+    int* arr, int size,
+    int*& plus, int& plusSize,
+    int*& minus, int& minusSize,
+    int*& zero, int& zeroSize
+) {
+    plusSize = minusSize = zeroSize = 0;
+
+    for (int i = 0; i < size; i++) {
+        if (arr[i] > 0) plusSize++;
+        else if (arr[i] < 0) minusSize++;
+        else zeroSize++;
+    }
+
+    plus = new int[plusSize];
+    minus = new int[minusSize];
+    zero = new int[zeroSize];
+
+    int p = 0, m = 0, z = 0;
+    for (int i = 0; i < size; i++) {
+        if (arr[i] > 0) plus[p++] = arr[i];
+        else if (arr[i] < 0) minus[m++] = arr[i];
+        else zero[z++] = arr[i];
+    }
+}
+
+int main() {
+    /*1. Оголосіть цілу змінну та вказівник на неї.Присвойте значення змінній і
+    виведіть це значення через вказівник.*/
+    int a = 5;
+    int* ptr = &a;
+    cout << "Значення змінної a: " << *ptr << endl;
+    cout << endl;
+
+    /*2. Оголосіть масив із 5 цілих чисел.Виведіть усі елементи масиву,
+        використовуючи вказівник(без індексів).*/
+    int size1 = 5;
+    int* pdynamicArray = new int[size1];
+    for (int i = 0; i < size1; i++) {
+        *(pdynamicArray + i) = (i + 1) * 10;
+    }
+    cout << "Елементи динамічного масиву:" << endl;
+    for (int i = 0; i < size1; i++) {
+        cout << *(pdynamicArray + i) << endl;
+    }
+    delete[] pdynamicArray;
+    pdynamicArray = nullptr;
+    cout << endl;
+
+    /*3. Створіть функцію, яка приймає вказівник на int і збільшує значення за
+    цим вказівником на 1.*/
+    int value = 5;
+    int* ptr2 = &value;
+    incrementValue(ptr2);
+    cout << endl;
+
+    /*/4. Створіть функцію, яка приймає два вказівники на int і міняє значення цих
+    змінних місцями.*/
+    int b = 10, c = 20;
+    int* ptrA = &b;
+    int* ptrB = &c;
+    swapValues(ptrA, ptrB);
+    cout << endl;
+
+    /*Знайдіть суму всіх елементів масиву int a[10], використовуючи лише
+вказівники та арифметику вказівників*/
+    int arr1[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    int size2 = sizeof(arr1) / sizeof(arr1[0]);
+    sumArray(arr1, size2);
+    cout << endl;
+
+    /*6. Реалізуйте функцію, яка отримує вказівник на масив і його розмір, і
+        повертає кількість парних елементів(без використання індексів).*/
+    int arr2[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    int size3 = sizeof(arr2) / sizeof(arr2[0]);
+    int evenCount = countEven(arr2, size3);
+    cout << "Кількість парних елементів: " << evenCount << endl;
+    cout << endl;
+
+    /*7. Реалізуйте функцію, яка отримує вказівник на масив і його розмір, і
+        повертає максимальний елемент масиву.*/
+    int arr3[7] = { 3, 5, 7, 2, 8, 1, 4 };
+    int size4 = sizeof(arr3) / sizeof(arr3[0]);
+    int maxElement = findMax(arr3, size4);
+    cout << "Максимальний елемент масиву: " << maxElement << endl;
+    cout << endl;
+
+    /*8. Напишіть функцію, яка приймає вказівник на масив і його розмір, і
+        перевертає масив(інвертує порядок елементів), використовуючи лише
+        вказівники.*/
+    int arr4[5] = { 1, 2, 3, 4, 5 };
+    int size5 = sizeof(arr4) / sizeof(arr4[0]);
+    cout << "Вихідний масив: ";
+    for (int i = 0; i < size5; i++) {
+        cout << *(arr4 + i) << " ";
+    }
+    cout << endl;
+    reverseArray(arr4, size5);
+    cout << "Перевернутий масив: ";
+    for (int i = 0; i < size5; i++) {
+        cout << *(arr4 + i) << " ";
+    }
+    cout << endl;
+    cout << endl;
+
+    /*9. Створіть функцію, яка підраховує кількість додатних, від’ємних і нульових
+     елементів у масиві, та зберігає ці значення через три передані вказівники.*/
+    int size6;
+    cout << "Введіть розмір масиву: ";
+    cin >> size6;
+    int* arr5 = new int[size6];
+    cout << "Введіть елементи масиву: ";
+    for (int i = 0; i < size6; i++) {
+        cin >> *(arr5 + i);
+    }
+    int posCount = 0, negCount = 0, zeroCount = 0;
+    countElements(arr5, size6, &posCount, &negCount, &zeroCount);
+    cout << "Кількість додатних елементів: " << posCount << endl;
+    cout << "Кількість від'ємних елементів: " << negCount << endl;
+    cout << "Кількість нульових елементів: " << zeroCount << endl;
+    delete[] arr5;
+    cout << endl;
+
+    /*10.Реалізуйте функцію, яка отримує вказівник на масив і його розмір, та
+     замінює всі непарні елементи на 0 (використовуючи вказівники).*/
+
+    cout << "Task 10: Replace odd elements with zero" << endl;
+    int size7;
+    cout << "Введіть розмір масиву: ";
+    cin >> size7;
+    int* arr6 = new int[size7];
+    cout << "Введіть елементи масиву: ";
+    for (int i = 0; i < size7; i++) {
+        cin >> *(arr6 + i);
+    }
+    replaceOddWithZero(arr6, size7);
+    for (int i = 0; i < size7; i++) {
+        cout << *(arr6 + i) << " ";
+    }
+    cout << endl;
+    delete[] arr6;
+    cout << endl;
+
+    /*11. Створіть функцію, яка копіює всі парні елементи з одного масиву в інший
+того самого розміру (залишені місця за потреби заповнити нулями).
+Використовуйте вказівники.*/
+
+    int size8;
+    cout << "Введіть розмір масиву: ";
+    cin >> size8;
+    int* pArray = new int[size8];
+    int* destinationArray = new int[size8];
+    cout << "Введіть елементи масиву: ";
+    for (int i = 0; i < size8; i++) {
+        cin >> *(pArray + i);
+    }
+    copyEvenElements(pArray, destinationArray, size8);
+    cout << "Масив з парними елементами: ";
+    for (int i = 0; i < size8; i++) {
+        cout << *(destinationArray + i) << " ";
+    }
+    cout << endl;
+    delete[] pArray;
+    delete[] destinationArray;
+
+    return 0;
+    
+    /*Ввести з клавіатури індекс елемента, видалити елемент із вказаним
+    індексом з масиву(масив перестворюється)*/
+#       
+    int size8 = 5;
+    int* pArray2 = new int[size8];
+    int index;
+    cout << "Введіть індекс елемента для видалення: ";
+    cin >> index;
+
+        if (index < 0 || index >= size8) {
+            cout << "Невірний індекс!" << endl;
+            delete[] pArray2;
+            return 1;
+        }
+
+        int* newArray = new int[size8 - 1];
+        int j = 0;
+
+        for (int i = 0; i < size8; i++) {
+            if (i != index) {
+                newArray[j] = pArray2[i];
+                j++;
+            }
+        }
+
+       cout << "Новий масив: ";
+        for (int i = 0; i < size8 - 1; i++) {
+            cout << newArray[i] << " ";
+        }
+        cout << endl;
+
+        delete[] pArray2;
+        delete[] newArray;
+        return 0;
+
+
+	/*Усі від’ємні числа масиву записати в новий динамічний масив.*/
+    int size9;
+	cout << "Введіть розмір масиву: ";
+    cin >> size9;
+    int* pArray3 = new int[size9];
+	cout << "Введіть елементи масиву: ";
+    for (int i = 0;i < size9;i++) {
+        cin >> *(pArray3 + i);
+    }
+    int* pNegativeArray = new int[size9];
+    int negativeCount = 0;
+    for (int i = 0;i < size9;i++) {
+        if (*(pArray3 + i) < 0) {
+			*(pNegativeArray + negativeCount) = *(pArray3 + i);
+			negativeCount++;
+			
+        }
+    }
+	cout << "Від'ємні числа масиву: ";
+	for (int i = 0; i < negativeCount; i++) {
+		cout << *(pNegativeArray + i) << " ";
+	}
+	cout << endl;
+	delete[] pArray3;
+	delete[] pNegativeArray;
+	return 0;
+    /*Дано два масиви: A[M] та B[N] (M і N вводяться з клавіатури). Необхідно
+створити третій масив мінімально можливого розміру, в якому потрібно
+зібрати елементи обох масивів.*/
+	int sizeM, sizeN;
+	cout << "Введіть розмір масиву A (M): ";
+	cin >> sizeM;
+	int* pA = new int[sizeM];
+	cout << "Введіть елементи масиву A: ";
+	for (int i = 0; i < sizeM; i++) {
+		cin >> *(pA + i);
+	}
+	cout << "Введіть розмір масиву B (N): ";
+	cin >> sizeN;
+	int* pB = new int[sizeN];
+	cout << "Введіть елементи масиву B: ";
+	for (int i = 0; i < sizeN; i++) {
+		cin >> *(pB + i);
+	}
+	int sizeC = sizeM + sizeN;
+	int* pC = new int[sizeC];
+	for (int i = 0; i < sizeM; i++) {
+		*(pC + i) = *(pA + i);
+	}
+	for (int i = 0; i < sizeN; i++) {
+		*(pC + sizeM + i) = *(pB + i);
+	}
+	cout << "Елементи масиву C: ";
+	for (int i = 0; i < sizeC; i++) {
+		cout << *(pC + i) << " ";
+	}
+	cout << endl;
+	delete[] pA;
+	delete[] pB;
+	delete[] pC;
+	return 0;
+    /*Дано два масиви: A[M] та B[N] (M і N вводяться з клавіатури). Необхідно
+створити третій масив мінімально можливого розміру, в якому потрібно
+зібрати спільні елементи двох масивів.
+*/
+    int sizeM2, sizeN2;
+	cout << "Введіть розмір масиву A (M): ";
+    cin >> sizeM2;
+    int* pA2 = new int[sizeM2];
+	cout << "Введіть елементи масиву A: ";
+    for (int i = 0;i < size9;i++) {
+        cin >> *(pA2 + i);
+    }
+	cout << "Введіть розмір масиву B (N): ";
+    cin >> sizeN2;
+    int* pB2 = new int[sizeN2];
+	cout << "Введіть елементи масиву B: ";
+    for (int i = 0;i < size9;i++) {
+        cin >> *(pB + i);
+    }
+    int sizeC2 = 0;
+    int* pC2 = new int[sizeM2 + sizeN2];
+    for (int i = 0;i < size9;i++) {
+        for (int j = 0;j < sizeN2;j++) {
+			if (*(pA2 + i) == *(pB2 + j)) {
+				*(pC2 + sizeC2) = *(pA2 + i);
+				sizeC2++;
+				break; 
+			}
+        }
+    }
+    cout << "Спільні елементи масивів: ";
+    for (int i = 0; i < sizeC2; i++) {
+        cout << *(pC2 + i) << " ";
+    }
+    cout << endl;
+    delete[] pA2;
+    delete[] pB2;
+    delete[] pC2;
+    return 0;
+
+    /*Дано два масиви: A[M] та B[N] (M і N вводяться з клавіатури). Необхідно
+створити третій масив мінімально можливого розміру, в якому потрібно
+зібрати елементи масиву A, які не входять до масиву B.
+*/
+int M, N;
+cout << "Введіть розмір масиву A (M): ";
+cin >> M;
+int* pA3 = new int[M];
+cout << "Введіть елементи масиву A: ";
+        for (int i = 0; i < M; i++) {
+            cin >> pA3[i];
+        }
+
+cout << "Введіть розмір масиву B (N): ";
+cin >> N;
+int* pB3 = new int[N];
+cout << "Введіть елементи масиву B: ";
+        for (int i = 0; i < N; i++) {
+            cin >> pB3[i];
+        }
+int* C = new int[M];  
+int sizeC = 0;
+
+        for (int i = 0; i < M; i++) {
+            int count = 0; 
+            for (int j = 0; j < N; j++) {
+                if (pA3[i] == pB3[j]) {
+                    count = 1;
+                    break;
+                }
+            }
+            if (count == 0) {
+                C[sizeC] = pA3[i];
+                sizeC++;
+            }
+        }
+
+        cout << "Елементи масиву C (з A, яких немає в B): ";
+        for (int i = 0; i < sizeC; i++) {
+            cout << C[i] << " ";
+        }
+        cout << endl;
+
+        delete[] pA3;
+        delete[] pB3;
+        delete[] C;
+
+        return 0;
+    }
+
+    /*Створити функцію, яка дозволяє додавати блок елементів у кінець
+масиву.*/
+    void addElements(int** arr, int& size, int* newElements, int newSize);
+    int main() {
+        int size10;
+        cout << "Введіть розмір масиву: ";
+        cin >> size10;
+        int* pArray4 = new int[size10];
+        cout << "Введіть елементи масиву: ";
+        for (int i = 0; i < size10; i++) {
+            cin >> *(pArray4 + i);
+        }
+
+        int newSize;
+        cout << "Введіть кількість нових елементів: ";
+        cin >> newSize;
+        int* newElements = new int[newSize];
+        cout << "Введіть нові елементи: ";
+        for (int i = 0; i < newSize; i++) {
+            cin >> *(newElements + i);
+        }
+
+        addElements(&pArray4, size10, newElements, newSize); 
+
+        cout << "Масив після додавання нових елементів: ";
+        for (int i = 0; i < size10; i++) {  
+            cout << *(pArray4 + i) << " ";
+        }
+        cout << endl;
+
+        delete[] pArray4;
+        delete[] newElements;
+        return 0;
+    }
+    /*.Написати функцію, яка отримує вказівник на динамічний масив і його
+розмір. Функція повинна видалити з масиву всі прості числа і повернути
+вказівник на новий динамічний масив.
+*/
+    int main() {
+        int size;
+        cout << "Введіть розмір масиву: ";
+        cin >> size;
+
+        int* arr = new int[size];
+        cout << "Введіть елементи масиву: ";
+        for (int i = 0; i < size; i++) {
+            cin >> arr[i];
+        }
+
+        arr = removePrimes(arr, size);
+
+        cout << "Масив без простих чисел: ";
+        for (int i = 0; i < size; i++) {
+            cout << arr[i] << " ";
+        }
+        cout << endl;
+
+        delete[] arr;
+        return 0;
+    }
+    /*1. Написати функцію, яка отримує вказівник на статичний масив і його
+розмір. Функція розподіляє додатні, від’ємні та нульові елементи в окремі
+динамічні масиви.*/
+    int main() {
+        const int size = 10;
+        int arr[size];
+
+        cout << "Введіть 10 чисел: ";
+        for (int i = 0; i < size; i++) cin >> arr[i];
+
+        int* plus; int plusSize;
+        int* minus; int minusSize;
+        int* zero; int zeroSize;
+
+        splitArray(arr, size, plus, plusSize, minus, minusSize, zero, zeroSize);
+
+        cout << "Додатні: ";
+        for (int i = 0; i < plusSize; i++) cout << plus[i] << " ";
+
+        cout << "\nВід’ємні: ";
+        for (int i = 0; i < minusSize; i++) cout << minus[i] << " ";
+
+        cout << "\nНулі: ";
+        for (int i = 0; i < zeroSize; i++) cout << zero[i] << " ";
+
+        delete[] plus;
+        delete[] minus;
+        delete[] zero;
+
+        return 0;
+    }
+
+    
+
+
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
