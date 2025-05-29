@@ -4,7 +4,7 @@ using namespace std;
 /*3.Створіть функцію, яка приймає вказівник на int і збільшує значення за
 цим вказівником на 1.*/
 void incrementValue(int* ptr) {
-    *ptr += 1;
+    *ptr = *ptr + 1;
     cout << "Значення після збільшення: " << *ptr << endl;
 }
 
@@ -128,38 +128,38 @@ void addElements(int** arr, int& size, int* newElements, int newSize) {
 вказівник на новий динамічний масив.
 */
 int checkPrime(int num) {
-    if (num < 2) return 0;
+    if (num < 2) return 0; 
     for (int i = 2; i * i <= num; i++) {
         if (num % i == 0) {
-            return 0;
+            return 0; 
         }
     }
     return 1;
 }
-
 int* removePrimes(int* arr, int& size) {
-    int countNonPrime = 0;
+    int countNonPrimes = 0;
     for (int i = 0; i < size; i++) {
-        if (checkPrime(arr[i]) == 0) {
-            countNonPrime++;
+        if (!checkPrime(arr[i])) {
+            countNonPrimes++;
         }
     }
 
-    int* newArr = new int[countNonPrime];
-    int j = 0;
-    for (int i = 0; i < size; i++) {
-        if (checkPrime(arr[i]) == 0) {
-            newArr[j] = arr[i];
-            j++;
+    int* newArr = new int[countNonPrimes];
+    int index = 0;
+
+   for (int i = 0; i < size; i++) {
+        if (!checkPrime(arr[i])) {
+            newArr[index++] = arr[i];
         }
     }
-
-    delete[] arr;
-    size = countNonPrime;
-
-    return newArr;
+    delete[] arr; 
+    size = countNonPrimes; 
+    return newArr; 
 }
-/**/
+
+/*Написати функцію, яка отримує вказівник на статичний масив і його
+розмір. Функція розподіляє додатні, від’ємні та нульові елементи в окремі
+динамічні масиви.*/
 void splitArray(
     int* arr, int size,
     int*& plus, int& plusSize,
@@ -224,7 +224,7 @@ int main() {
     swapValues(ptrA, ptrB);
     cout << endl;
 
-    /*Знайдіть суму всіх елементів масиву int a[10], використовуючи лише
+    /*5.Знайдіть суму всіх елементів масиву int a[10], використовуючи лише
 вказівники та арифметику вказівників*/
     int arr1[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     int size2 = sizeof(arr1) / sizeof(arr1[0]);
@@ -285,8 +285,6 @@ int main() {
 
     /*10.Реалізуйте функцію, яка отримує вказівник на масив і його розмір, та
      замінює всі непарні елементи на 0 (використовуючи вказівники).*/
-
-    cout << "Task 10: Replace odd elements with zero" << endl;
     int size7;
     cout << "Введіть розмір масиву: ";
     cin >> size7;
@@ -344,6 +342,11 @@ int main() {
 
         int* newArray = new int[size8 - 1];
         int j = 0;
+
+        cout << "Введіть елементи масиву: ";
+        for (int i = 0; i < size8; i++) {
+            cin >> pArray2[i];
+        }
 
         for (int i = 0; i < size8; i++) {
             if (i != index) {
@@ -574,7 +577,7 @@ int sizeC = 0;
         delete[] arr;
         return 0;
     }
-    /*1. Написати функцію, яка отримує вказівник на статичний масив і його
+    /*11. Написати функцію, яка отримує вказівник на статичний масив і його
 розмір. Функція розподіляє додатні, від’ємні та нульові елементи в окремі
 динамічні масиви.*/
     int main() {
